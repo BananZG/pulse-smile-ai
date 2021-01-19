@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Grid,
   makeStyles,
   Slide,
   Typography
@@ -28,7 +29,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const getDummyNumber = () => {
-  return 1 + Math.floor(Math.random() * Math.floor(4000)) / 10000;
+  return 1 - Math.floor(Math.random() * Math.floor(4000)) / 10000;
 };
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -42,6 +43,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
 
   const onImageUpload = async image => {
+    setOpen(true);
     setLoading(true);
     const formData = new FormData();
     formData.append("image", image);
@@ -65,11 +67,8 @@ export default function App() {
       const json = await response.json();
       console.log(json);
       setSmilingData(json);
-    } else {
-      setSmilingData({ score: getDummyNumber() });
     }
     setLoading(false);
-    setOpen(true);
   };
   const reset = () => {
     setOpen(false);
@@ -77,14 +76,6 @@ export default function App() {
   };
   return (
     <Container component="main" maxWidth="xs">
-      <Dialog
-        keepMounted
-        fullScreen
-        className={classes.backdrop}
-        open={loading}
-      >
-        <CircularProgress color="inherit" />
-      </Dialog>
       <div className={classes.paper}>
         <img
           src={PulseLogo}
@@ -103,19 +94,30 @@ export default function App() {
         aria-labelledby="alert-dialog-slide-title"
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle id="alert-dialog-slide-title">
-          {"Photo proccessed!"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            Your smiling index: {smilingData.score ?? 0}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={reset} color="primary">
-            Smile On!
-          </Button>
-        </DialogActions>
+        {(loading && (
+          <DialogContent>
+            <Grid container justify="center" alignItems="center">
+              <CircularProgress color="inherit" />
+            </Grid>
+          </DialogContent>
+        )) || (
+          <>
+            <DialogTitle id="alert-dialog-slide-title">
+              {"Photo proccessed!"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-slide-description">
+                You are {smilingData.result ?? "smiling"}. Your smiling index:{" "}
+                {smilingData.score ?? getDummyNumber()}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={reset} color="primary">
+                Smile On!
+              </Button>
+            </DialogActions>
+          </>
+        )}
       </Dialog>
     </Container>
   );
