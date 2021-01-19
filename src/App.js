@@ -76,7 +76,6 @@ export default function App() {
       <Dialog
         keepMounted
         fullScreen
-        style={{ backgroundColor: "rgba(255,255,255,0.5" }}
         className={classes.backdrop}
         open={loading}
       >
