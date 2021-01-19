@@ -47,7 +47,7 @@ export default function ImageUploadCard({ onImageUpload }) {
     reader.onloadend = function(e) {
       setSelectedImage(reader.result);
     }.bind(this);
-    setSelectedFile(event.target.files[0]);
+    setSelectedFile(file);
   };
 
   const onCapture = file => {

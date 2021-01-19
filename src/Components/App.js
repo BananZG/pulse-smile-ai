@@ -36,39 +36,42 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+export const smileAPI = file => {
+  const formData = new FormData();
+  formData.append("image", file);
+  return fetch("https://smilrecognizer.azurewebsites.net/density", {
+    headers: {
+      "sec-fetch-dest": "document",
+      "sec-fetch-mode": "navigate",
+      "sec-fetch-site": "same-origin",
+      "sec-fetch-user": "?1",
+      "upgrade-insecure-requests": "1"
+    },
+    referrer: "https://smilrecognizer.azurewebsites.net/",
+    referrerPolicy: "strict-origin-when-cross-origin",
+    body: formData,
+    method: "POST",
+    mode: "no-cors",
+    credentials: "omit"
+  });
+};
+
 export default function App() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [smilingData, setSmilingData] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const onImageUpload = async image => {
+  const onImageUpload = image => {
     setOpen(true);
     setLoading(true);
     const formData = new FormData();
     formData.append("image", image);
-    const response = await fetch(
-      // 'https://smilrecognizer.azurewebsites.net/density'
-      "https://smilrecognizer.azurewebsites.net/density",
-      {
-        method: "POST",
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          api_key: "51b02d6f2faa8c79c70fe58131529e90",
-          Origin: "https://smilrecognizer.azurewebsites.net"
-        },
-        referrer: "https://smilrecognizer.azurewebsites.net/",
-        mode: "no-cors",
-        credentials: "omit",
-        body: formData
-      }
-    ).catch(console.log);
-    if (response && response.ok) {
-      const json = await response.json();
-      console.log(json);
-      setSmilingData(json);
-    }
-    setLoading(false);
+    smileAPI(image)
+      .then(res => res.json())
+      .then(setSmilingData)
+      .finally(() => setLoading(false))
+      .catch(console.log);
   };
   const reset = () => {
     setOpen(false);
