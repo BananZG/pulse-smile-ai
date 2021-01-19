@@ -1,20 +1,18 @@
 // imports the React Javascript Library
 import React, { useState } from "react";
 //Card
-import Card from "@material-ui/core/Card";
+import { Card, Container, Button, Fab, Grid } from "@material-ui/core";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 
-import Fab from "@material-ui/core/Fab";
-import Grid from "@material-ui/core/Grid";
+import { blue } from "@material-ui/core/colors";
 
-import blue from "@material-ui/core/colors/blue";
+import TakeSelfie from "./TakeSelfie";
 
 import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate";
 
 //Tabs
 import { makeStyles } from "@material-ui/core/styles";
-import { Button, Container } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   form: {
@@ -52,6 +50,11 @@ export default function ImageUploadCard({ onImageUpload }) {
     setSelectedFile(event.target.files[0]);
   };
 
+  const onCapture = file => {
+    setSelectedImage(file);
+    setSelectedFile(new File([file], "selfie.jpeg"));
+  };
+
   const renderInitialState = () => {
     return (
       <React.Fragment>
@@ -61,7 +64,6 @@ export default function ImageUploadCard({ onImageUpload }) {
               accept="image/*"
               className={classes.input}
               id="contained-button-file"
-              multiple
               type="file"
               onChange={handleUploadClick}
             />
@@ -70,6 +72,9 @@ export default function ImageUploadCard({ onImageUpload }) {
                 <AddPhotoAlternateIcon />
               </Fab>
             </label>
+          </Grid>
+          <Grid container justify="center" alignItems="center">
+            <TakeSelfie onCapture={onCapture} />
           </Grid>
         </CardContent>
       </React.Fragment>

@@ -11,7 +11,7 @@ import {
   Slide,
   Typography
 } from "@material-ui/core";
-import PulseLogo from "./resources/PulseLogo.svg";
+import PulseLogo from "../resources/PulseLogo.svg";
 import React, { useState } from "react";
 import ImageUpload from "./ImageUpload";
 
