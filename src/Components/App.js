@@ -27,6 +27,10 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const getDummyNumber = () => {
+  return 1 + Math.floor(Math.random() * Math.floor(4000)) / 10000;
+};
+
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -62,7 +66,7 @@ export default function App() {
       console.log(json);
       setSmilingData(json);
     } else {
-      setSmilingData({ score: 1.0476190476190474 });
+      setSmilingData({ score: getDummyNumber() });
     }
     setLoading(false);
     setOpen(true);
